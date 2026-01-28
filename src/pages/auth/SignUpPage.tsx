@@ -77,7 +77,7 @@ export default function SignUpPage() {
         </div>
 
         <p className="text-sm text-primary-foreground/60">
-          © 2024 Admin Panel. All rights reserved.
+          © 2026 Admin Panel. All rights reserved.
         </p>
       </div>
 
