@@ -16,6 +16,8 @@ import {
   Lock,
   HelpCircle,
   MessageSquare,
+  Tag,
+  ShoppingBag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -45,6 +47,13 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { title: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+  {
+    title: 'Products',
+    icon: ShoppingBag,
+    children: [
+      { title: 'Categories', href: '/categories', icon: Tag },
+    ],
+  },
   {
     title: 'Management',
     icon: Users,

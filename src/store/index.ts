@@ -4,11 +4,13 @@ import storage from 'redux-persist/lib/storage';
 import authReducer from './slices/authSlice';
 import themeReducer from './slices/themeSlice';
 import userManagementReducer from './slices/userManagementSlice';
+import categoryReducer from './slices/categorySlice';
 
 const rootReducer = combineReducers({
     auth: authReducer,
     theme: themeReducer,
     userManagement: userManagementReducer,
+    categories: categoryReducer,
 });
 
 const persistConfig = {
