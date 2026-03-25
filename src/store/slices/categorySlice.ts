@@ -63,7 +63,7 @@ export const fetchCategories = createAsyncThunk(
       const response = await axiosInstance.get('/api/v1/products/categories', {
         params: { skip, limit },
       });
-      return response.data as Category[];
+      return response.data.data as Category[];
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         return rejectWithValue(error.response.data?.detail || 'Failed to fetch categories');

@@ -77,7 +77,7 @@ import { toast } from 'sonner';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const ITEMS_PER_PAGE = 8;
+// const ITEMS_PER_PAGE = 8; // Removed for dynamic pagination
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -310,6 +310,7 @@ export default function CategoriesPage() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // ── Load on mount ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -330,7 +331,7 @@ export default function CategoriesPage() {
   }, [error, dispatch]);
 
   // ── Filtered & paginated list ──────────────────────────────────────────────
-  const filtered = categories.filter((c) => {
+  const filtered = (categories || []).filter((c) => {
     const q = search.toLowerCase();
     const matchesSearch =
       c.name.toLowerCase().includes(q) ||
@@ -343,9 +344,9 @@ export default function CategoriesPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginated = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginated = filtered.slice(startIndex, startIndex + itemsPerPage);
 
   // ── CRUD handlers ──────────────────────────────────────────────────────────
   const handleCreate = useCallback(
@@ -415,7 +416,7 @@ export default function CategoriesPage() {
   }, [dispatch, deleteTarget]);
 
   // ── Stats ──────────────────────────────────────────────────────────────────
-  const totalActive = categories.filter((c) => c.is_active).length;
+  const totalActive = (categories || []).filter((c) => c.is_active).length;
   const totalInactive = categories.length - totalActive;
 
   return (
@@ -476,7 +477,7 @@ export default function CategoriesPage() {
           {[
             {
               label: 'Total Categories',
-              value: categories.length,
+              value: categories?.length || 0,
               icon: Layers,
               color: 'from-primary/20 to-primary/5 border-primary/20 text-primary',
             },
@@ -711,47 +712,71 @@ export default function CategoriesPage() {
             </Table>
 
             {/* ── Pagination ─────────────────────────────────────────────────── */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between border-t border-border/50 bg-muted/20 px-4 py-3">
-                <p className="text-sm text-muted-foreground">
-                  Showing {startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, filtered.length)} of{' '}
+            <div className="flex items-center justify-between border-t border-border/50 bg-muted/20 px-4 py-3">
+              <div className="flex items-center gap-6">
+                <p className="text-sm text-muted-foreground whitespace-nowrap">
+                  Showing {filtered.length > 0 ? startIndex + 1 : 0}–{Math.min(startIndex + itemsPerPage, filtered.length)} of{' '}
                   {filtered.length} {filtered.length === 1 ? 'category' : 'categories'}
                 </p>
+
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">Rows per page:</span>
+                  <Select
+                    value={itemsPerPage.toString()}
+                    onValueChange={(v) => {
+                      setItemsPerPage(parseInt(v));
+                      setCurrentPage(1);
+                    }}
                   >
-                    <ChevronLeft className="mr-1 h-4 w-4" />
-                    Previous
-                  </Button>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <Button
-                        key={page}
-                        variant={currentPage === page ? 'default' : 'ghost'}
-                        size="sm"
-                        className="h-8 w-8 p-0"
-                        onClick={() => setCurrentPage(page)}
-                      >
-                        {page}
-                      </Button>
-                    ))}
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                  >
-                    Next
-                    <ChevronRight className="ml-1 h-4 w-4" />
-                  </Button>
+                    <SelectTrigger className="h-8 w-[70px] text-xs">
+                      <SelectValue placeholder="10" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[10, 20, 50, 100].map((size) => (
+                        <SelectItem key={size} value={size.toString()} className="text-xs">
+                          {size}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            )}
+                {totalPages > 1 && (
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="mr-1 h-4 w-4" />
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <Button
+                          key={page}
+                          variant={currentPage === page ? 'default' : 'ghost'}
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={() => setCurrentPage(page)}
+                        >
+                          {page}
+                        </Button>
+                      ))}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                      <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -773,12 +798,12 @@ export default function CategoriesPage() {
         initialValues={
           editTarget
             ? {
-                name: editTarget.name,
-                description: editTarget.description ?? '',
-                slug: editTarget.slug,
-                is_active: editTarget.is_active,
-                note: editTarget.note ?? '',
-              }
+              name: editTarget.name,
+              description: editTarget.description ?? '',
+              slug: editTarget.slug,
+              is_active: editTarget.is_active,
+              note: editTarget.note ?? '',
+            }
             : undefined
         }
         isSubmitting={isUpdating}
