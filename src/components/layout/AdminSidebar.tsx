@@ -51,6 +51,7 @@ const navItems: NavItem[] = [
     title: 'Products',
     icon: ShoppingBag,
     children: [
+      { title: 'All Products', href: '/products', icon: ShoppingBag },
       { title: 'Categories', href: '/categories', icon: Tag },
     ],
   },

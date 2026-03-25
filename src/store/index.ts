@@ -5,12 +5,14 @@ import authReducer from './slices/authSlice';
 import themeReducer from './slices/themeSlice';
 import userManagementReducer from './slices/userManagementSlice';
 import categoryReducer from './slices/categorySlice';
+import productReducer from './slices/productSlice';
 
 const rootReducer = combineReducers({
     auth: authReducer,
     theme: themeReducer,
     userManagement: userManagementReducer,
     categories: categoryReducer,
+    products: productReducer,
 });
 
 const persistConfig = {
