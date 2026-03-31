@@ -61,6 +61,7 @@ const navItems: NavItem[] = [
     roles: ['admin', 'manager'],
     children: [
       { title: 'Users', href: '/users', icon: Users },
+      { title: 'Customers', href: '/customers', icon: Users },
       { title: 'Roles', href: '/roles', icon: Lock },
       { title: 'Permissions', href: '/permissions', icon: Shield },
     ],

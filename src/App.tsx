@@ -18,6 +18,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import ProductsPage from "@/pages/ProductsPage";
+import CustomersPage from "@/pages/CustomersPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <CategoriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute>
+            <CustomersPage />
           </ProtectedRoute>
         }
       />

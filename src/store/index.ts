@@ -6,6 +6,7 @@ import themeReducer from './slices/themeSlice';
 import userManagementReducer from './slices/userManagementSlice';
 import categoryReducer from './slices/categorySlice';
 import productReducer from './slices/productSlice';
+import customerReducer from './slices/customerSlice';
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     userManagement: userManagementReducer,
     categories: categoryReducer,
     products: productReducer,
+    customers: customerReducer,
 });
 
 const persistConfig = {
