@@ -6,7 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { SettingsSheet } from "@/components/SettingsSheet";
-import { useAppSelector } from "@/store/hooks";
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
 
 // Pages
 import LoginPage from "@/pages/auth/LoginPage";
@@ -108,7 +109,21 @@ function AppRoutes() {
 }
 
 const App = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const { isAuthenticated, token, user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    // Sync token to localStorage for axios access if redux-persist restored it
+    if (isAuthenticated && token) {
+      localStorage.setItem('auth_token', token);
+      if (user) {
+        localStorage.setItem('auth_user', JSON.stringify(user));
+      }
+    } else if (!isAuthenticated) {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+    }
+  }, [isAuthenticated, token, user]);
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -109,6 +109,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.error = null;
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
     },
     clearError: (state) => {
       state.error = null;
@@ -116,7 +117,7 @@ const authSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       state.isAuthenticated = true;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -131,6 +132,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         localStorage.setItem('auth_token', action.payload.token);
+        localStorage.setItem('auth_user', JSON.stringify(action.payload.user));
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
@@ -147,6 +149,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         localStorage.setItem('auth_token', action.payload.token);
+        localStorage.setItem('auth_user', JSON.stringify(action.payload.user));
       })
       .addCase(signUp.rejected, (state, action) => {
         state.isLoading = false;
