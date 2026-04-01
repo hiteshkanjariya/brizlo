@@ -47,6 +47,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { title: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+  { title: 'Sell / Billing', icon: FileText, href: '/billing' },
   {
     title: 'Products',
     icon: ShoppingBag,

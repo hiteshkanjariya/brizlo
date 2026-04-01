@@ -20,23 +20,24 @@ import ProfilePage from "@/pages/ProfilePage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import ProductsPage from "@/pages/ProductsPage";
 import CustomersPage from "@/pages/CustomersPage";
+import BillingPage from "@/pages/BillingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 function AppRoutes() {
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-
+  const token = localStorage.getItem('auth_token');
   return (
     <Routes>
       {/* Public Routes */}
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />}
+        element={isAuthenticated && token ? <Navigate to="/dashboard" replace /> : <LoginPage />}
       />
       <Route
         path="/signup"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUpPage />}
+        element={isAuthenticated && token ? <Navigate to="/dashboard" replace /> : <SignUpPage />}
       />
       <Route
         path="/forgot-password"
@@ -73,6 +74,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <CustomersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/billing"
+        element={
+          <ProtectedRoute>
+            <BillingPage />
           </ProtectedRoute>
         }
       />

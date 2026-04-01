@@ -11,13 +11,14 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
+  console.log(`user`, isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && user && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+  //   return <Navigate to="/dashboard" replace />;
+  // }
 
   return <>{children}</>;
 }
